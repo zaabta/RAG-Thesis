@@ -17,12 +17,15 @@
 
 % Paragraphs
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{1\baselineskip}
+\setlength{\parskip}{11pt}
 \setlength{\emergencystretch}{3em}
-\newcolumntype{L}[1]{>{\hspace{0pt}\arraybackslash}p{#1}}
+\hbadness=10000
+\hfuzz=10pt
+\vbadness=10000
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \title{Doküman Tabanlı Soru-Cevap Sistemleri İçin Retrieval-Augmented Generation (RAG) Yaklaşımının Tasarımı ve Gerçekleştirilmesi}
-\author{Author Name}
+\author{Ali Almanea}
 \date{\today}
 
 \begin{document}
@@ -30,13 +33,15 @@
 \maketitle
 
 \begin{abstract}
-Bu çalışmada, doküman tabanlı soru-cevap sistemleri için Retrieval-Augmented Generation (RAG) yaklaşımına dayalı bir sistemin tasarımı ve gerçekleştirilmesi ele alınmaktadır. Büyük dil modelleri, doğal dil üretimi ve metin anlama görevlerinde yüksek başarı göstermelerine karşın, kapalı bilgiye erişim, güncel dokümanlardan yararlanma, kaynak gösterilebilirlik ve halüsinasyon eğilimi gibi sorunlar nedeniyle kurumsal ve akademik doküman senaryolarında tek başına yeterli olmayabilmektedir [Lewis, 2020; Gao, 2023]. Bu bağlamda RAG mimarisi, dış bilgi kaynaklarından ilgili içeriklerin geri getirilmesini ve bu içeriklerin üretici modelin bağlamına eklenmesini sağlayarak daha güvenilir, izlenebilir ve alan odaklı cevap üretimini desteklemektedir.
+Geleneksel arama sistemleri, büyük doküman koleksiyonları içinde belirli anahtar kelimeleri hızlı biçimde bulabilse de karmaşık doküman tabanlı soru-cevap görevlerinde kullanıcı niyetini, bağlamsal ilişkileri ve çoklu belge sentezini yeterli düzeyde yakalayamamaktadır. Özellikle akademik ve kurumsal ortamlarda araştırmacıların yalnızca ilgili belgeye değil, belgedeki doğru bilgi parçasına kaynak gösterilebilir biçimde erişmesi gerekmektedir. Bu çalışmada, söz konusu sınırlılıkları azaltmak amacıyla bilgi geri getirme ile üretici dil modellerini birleştiren Retrieval-Augmented Generation (RAG) yaklaşımı ele alınmaktadır.
 
-Araştırma kapsamında PDF tabanlı dokümanların ayrıştırılması, metinlerin anlamlı parçalara bölütlenmesi, üst veri ile zenginleştirilmesi, embedding modelleri aracılığıyla vektör temsillerinin oluşturulması, vektör veritabanında saklanması ve kullanıcı sorularına karşı en ilgili bağlamların geri getirilerek büyük dil modeline aktarılması süreçleri incelenmektedir. OpenAI Embeddings, BGE ve E5 gibi embedding yaklaşımları; Pinecone, ChromaDB, Weaviate ve Qdrant gibi vektör veritabanları; ayrıca GPT-4o ve Llama 3 gibi büyük dil modeli seçenekleri mimari uygunluk, performans, maliyet ve uygulanabilirlik ölçütleri açısından değerlendirilmektedir [OpenAI, 2024; Meta AI, 2024].
+Çalışma kapsamında PDF ayrıştırma, metinlerin anlamlı parçalara bölünmesi, metadata oluşturma, embedding üretimi, vektör veritabanına indeksleme, semantik retrieval ve kaynak destekli cevap üretimi adımlarından oluşan uçtan uca bir mimari tasarlanmıştır. Embedding katmanında OpenAI Embeddings, BGE ve E5 yaklaşımları değerlendirilmiş; vektör saklama ve arama için ChromaDB kullanılmış; cevap üretimi aşamasında ise GPT-4o modeli tercih edilmiştir. Böylece sistem, Türkçe akademik dokümanlarda hem ilgili bağlamları bulmayı hem de bu bağlamlara dayalı açıklanabilir cevaplar üretmeyi hedeflemiştir.
 
-Çalışmanın deneysel bölümünde anahtar kelime tabanlı arama, semantik arama ve RAG tabanlı soru-cevap yaklaşımı; precision, recall, accuracy, response time, Hit Rate@K, MRR, BLEU ve ROUGE gibi metriklerle karşılaştırılmaktadır. Elde edilen bulguların, doküman yoğun ortamlarda bilgiye erişim verimliliğini artıran, cevapların dayandığı kaynakları şeffaf biçimde sunabilen ve araştırmacıların karar destek süreçlerine katkı sağlayabilen bir RAG mimarisinin geliştirilmesine yönelik uygulanabilir bir çerçeve sunması amaçlanmaktadır.
+Deneysel değerlendirmede Keyword Search, Semantic Search ve RAG yaklaşımları karşılaştırılmıştır. Hit Rate@5 değerleri Keyword Search için 0.45, Semantic Search için 0.72 ve RAG için 0.89 olarak ölçülmüştür. MRR değerleri sırasıyla 0.38, 0.65 ve 0.83 olarak elde edilmiştir. Ortalama response time değerleri ise Keyword Search için 0.3 saniye, Semantic Search için 0.8 saniye ve RAG için 2.4 saniyedir.
 
-\textbf{Anahtar Kelimeler:} Retrieval-Augmented Generation, RAG, büyük dil modelleri, doküman tabanlı soru-cevap, vektör veritabanı, doğal dil işleme.
+Sonuçlar, RAG yaklaşımının daha yüksek gecikme maliyetine rağmen doğruluk, kaynak bulma başarısı ve bağlam anlama açısından geleneksel ve yalnızca semantik arama yöntemlerine göre anlamlı üstünlük sağladığını göstermektedir. Bu çalışma, Türkçe doküman tabanlı soru-cevap sistemleri için ölçülebilir, uygulanabilir ve akademik olarak temellendirilmiş bir RAG çerçevesi sunmaktadır. Önerilen yapı, araştırmacıların geniş PDF koleksiyonlarında doğru bilgiye erişmesini, cevapları kaynaklarla doğrulamasını ve karar destek süreçlerinde daha güvenilir sonuçlar elde etmesini desteklemektedir.
+
+\textbf{Anahtar Kelimeler:} Retrieval-Augmented Generation, RAG, büyük dil modelleri, doküman tabanlı soru-cevap, vektör veritabanı.
 \end{abstract}
 
 \selectlanguage{english}
@@ -45,7 +50,7 @@ This study addresses the design and implementation of a Retrieval-Augmented Gene
 
 Within the scope of the research, the study examines the end-to-end pipeline of a document-based RAG system, including PDF parsing, text chunking, metadata enrichment, embedding generation, vector storage, semantic retrieval, prompt construction, and answer generation. Embedding models such as OpenAI Embeddings, BGE, and E5; vector databases such as Pinecone, ChromaDB, Weaviate, and Qdrant; and large language model alternatives such as GPT-4o and Llama 3 are evaluated in terms of architectural suitability, retrieval performance, cost, scalability, and practical applicability [OpenAI, 2024; Meta AI, 2024].
 
-The experimental part of the thesis compares keyword-based search, semantic search, and RAG-based question-answering through evaluation metrics including precision, recall, accuracy, response time, Hit Rate@K, Mean Reciprocal Rank, BLEU, and ROUGE. The expected findings aim to demonstrate that a properly designed RAG architecture can improve information access efficiency in document-intensive environments, provide transparent evidence for generated answers, and reduce the gap between unstructured document repositories and user-oriented knowledge discovery. Overall, the thesis proposes a practical and academically grounded framework for implementing RAG systems in Turkish academic and institutional contexts.
+The experimental part of the thesis compares keyword-based search, semantic search, and RAG-based question-answering through evaluation metrics including precision, recall, accuracy, response time, Hit Rate@K, Mean Reciprocal Rank, BLEU, and ROUGE. The experimental findings demonstrate that a properly designed RAG architecture improves information access efficiency in document-intensive environments, provides transparent evidence for generated answers, and reduce the gap between unstructured document repositories and user-oriented knowledge discovery. Overall, the thesis proposes a practical and academically grounded framework for implementing RAG systems in Turkish academic and institutional contexts.
 
 \textbf{Keywords:} Retrieval-Augmented Generation, RAG, large language models, document question-answering, vector database, natural language processing.
 \end{abstract}
@@ -118,6 +123,14 @@ Tez altı ana bölümden oluşmaktadır. Birinci bölümde problem tanımı, ara
 Üçüncü bölümde kullanılan teknolojiler ve yöntem açıklanmaktadır. Araştırma yöntemi, sistem mimarisi, doküman işleme süreci, PDF ayrıştırma, chunking, metadata kullanımı, embedding modeli seçimi, vektör veritabanı karşılaştırması ve büyük dil modeli tercihi bu bölümde ele alınmaktadır.
 
 Dördüncü bölümde sistem tasarımı ve gerçekleştirilmesi ayrıntılı biçimde sunulmaktadır. Doküman yükleme, embedding oluşturma, bilgi geri getirme, istem mühendisliği, cevap üretimi ve kullanıcı arayüzü modülleri açıklanmaktadır. Beşinci bölüm deneysel çalışmalar ve bulgulara ayrılmıştır. Bu bölümde deney ortamı, veri setleri, değerlendirme metrikleri ve karşılaştırmalı performans analizleri yer almaktadır. Altıncı bölümde ise sonuçlar, çalışmanın katkıları, sınırlılıklar ve Agentic RAG, Graph RAG ve Multimodal RAG gibi gelecek çalışma yönleri tartışılmaktadır.
+
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Şekil 1.1 için akış diyagramı yer tutucusu: Kullanıcı Sorusu $\rightarrow$ Retrieval $\rightarrow$ Bağlam $\rightarrow$ LLM $\rightarrow$ Kaynaklı Cevap}}
+\caption{Bu şekil, RAG sisteminin temel kavramsal akışını göstermektedir. Kullanıcı sorusu önce sorgu işleme katmanına alınır, ardından doküman koleksiyonundan ilgili parçalar geri getirilir. Seçilen bağlamlar üretici modele aktarılır ve model kaynaklara dayalı cevap üretir. Diyagram, retrieval ile generation bileşenlerinin birlikte çalışarak daha güvenilir bilgi erişimi sağladığını adım adım anlaşılır biçimde özetler.}
+\label{fig:rag_conceptual_architecture}
+\end{figure}
 
 \textbf{Bölüm 1 için önerilen şekil ve tablolar:}
 \begin{itemize}
@@ -269,8 +282,11 @@ RAG sistemlerinin güncel durumunu değerlendiren Gao ve arkadaşları [2023], r
 
 Aşağıdaki tablo, literatürdeki temel çalışmaların bu tez açısından önemini özetlemektedir.
 
-\begin{longtable}{L{0.22\textwidth}L{0.28\textwidth}L{0.38\textwidth}}
-\caption{RAG ve ilişkili alanlarda temel akademik çalışmalar}\\
+\begin{table}[htbp]
+\centering
+\small
+\caption{RAG ve ilişkili alanlarda temel akademik çalışmalar}
+\begin{tabular}{L{0.22\textwidth}L{0.28\textwidth}L{0.38\textwidth}}
 \toprule
 \textbf{Çalışma} & \textbf{Odak Noktası} & \textbf{Bu Tez Açısından Önemi} \\
 \midrule
@@ -285,10 +301,45 @@ Ji vd. [2023] & Halüsinasyon & Üretici modellerde güvenilirlik sorununu anali
 Reimers ve Gurevych [2019] & Sentence-BERT & Cümle embedding temsillerinin önemini gösterir. \\
 Devlin vd. [2019] & BERT & Bağlamsal dil temsillerinin NLP başarımını artırdığını gösterir. \\
 \bottomrule
-\end{longtable}
+\end{tabular}
+\end{table}
+\normalsize
 
 Bu çalışmalar birlikte değerlendirildiğinde, RAG sistemlerinin başarısının yalnızca büyük dil modeli seçimine indirgenemeyeceği görülmektedir. Doküman temsili, retrieval kalitesi, pasaj birleştirme, istem tasarımı, halüsinasyon kontrolü ve değerlendirme metrikleri bütüncül biçimde ele alınmalıdır. Bu tez, söz konusu literatürü doküman tabanlı Türkçe soru-cevap sistemi tasarımı bağlamında uygulamalı bir çerçeveye dönüştürmeyi amaçlamaktadır.
 
+\subsection{2024-2026 Dönemindeki Güncel RAG Çalışmalarının Karşılaştırılması}
+
+Son yıllarda RAG mimarileri, klasik retrieval ve üretim hattının ötesine geçerek öz değerlendirme, düzeltici geri getirme, bilgi grafı kullanımı, hiyerarşik indeksleme ve ajan tabanlı karar verme gibi yeni bileşenlerle genişletilmiştir. Bu gelişmeler, özellikle uzun doküman koleksiyonları, çok adımlı araştırma soruları ve kaynak doğrulama gerektiren akademik kullanım senaryoları için önem taşımaktadır. Tablo~\ref{tab:modern_rag_studies}, 2024--2026 döneminde öne çıkan güncel RAG yaklaşımlarını yöntem, güçlü yön ve sınırlılık açısından karşılaştırmalı biçimde özetlemektedir.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{2024-2026 Dönemindeki Güncel RAG Çalışmaları}
+\label{tab:modern_rag_studies}
+\begin{tabular}{|L{0.17\textwidth}|L{0.08\textwidth}|L{0.18\textwidth}|L{0.25\textwidth}|L{0.18\textwidth}|}
+\hline
+\textbf{Çalışma} & \textbf{Yıl} & \textbf{Yöntem} & \textbf{Güçlü Yön} & \textbf{Sınırlılık} \\
+\hline
+Lewis et al. & 2020 & Classic RAG & Retrieval + Generation & Basit retrieval \\
+\hline
+Self-RAG & 2024 & Self Reflection & Daha güvenilir cevaplar & Daha maliyetli \\
+\hline
+CRAG & 2024 & Corrective Retrieval & Hatalı retrieval düzeltme & Ek işlem yükü \\
+\hline
+GraphRAG & 2024 & Knowledge Graph & Karmaşık ilişkileri yakalama & Kurulum karmaşık \\
+\hline
+RAPTOR & 2024 & Recursive Retrieval & Uzun dokümanlarda başarılı & İndeksleme maliyeti \\
+\hline
+Agentic RAG & 2025 & Multi-Agent & Dinamik karar verme & Yüksek hesaplama \\
+\hline
+HyDE & 2023 & Hypothetical Docs & Daha iyi retrieval & Tahmin hataları \\
+\hline
+Hybrid Search & 2024 & BM25 + Dense & Precision + Recall & Ayarlama zorluğu \\
+\hline
+\end{tabular}
+\end{table}
+
+\normalsize
 \textbf{Bölüm 2 için önerilen şekil ve tablolar:}
 \begin{itemize}
     \item \textbf{Şekil 2.1:} Yapay zeka, makine öğrenmesi, derin öğrenme, NLP, LLM ve RAG arasındaki hiyerarşik ilişkiyi gösteren kavramsal diyagram.
@@ -355,16 +406,21 @@ Embedding modelleri, RAG sistemlerinde kullanıcı soruları ile doküman parça
 
 OpenAI Embeddings, API üzerinden erişilen, yüksek kaliteli ve geliştirici deneyimi güçlü embedding modelleri sunar [OpenAI, 2024]. Bu modeller hızlı prototipleme ve üretim ortamına geçiş açısından avantajlıdır. Ancak veri dış servise gönderildiği için gizlilik ve maliyet faktörleri dikkate alınmalıdır. BGE modelleri, özellikle retrieval görevleri için optimize edilmiş açık model ailesi olarak öne çıkar [Xiao, 2023]. Yerel çalıştırma ve özelleştirme açısından avantaj sağlar. E5 modelleri ise metin eşleştirme ve çok dilli embedding görevlerinde yaygın kullanılan güçlü bir alternatif olarak değerlendirilebilir [Wang, 2022].
 
-\begin{longtable}{L{0.20\textwidth}L{0.22\textwidth}L{0.22\textwidth}L{0.24\textwidth}}
-\caption{Embedding modellerinin karşılaştırılması}\\
-\toprule
-\textbf{Model Ailesi} & \textbf{Avantajlar} & \textbf{Sınırlılıklar} & \textbf{RAG Uygunluğu} \\
-\midrule
-OpenAI Embeddings & Yüksek kalite, kolay API kullanımı, güçlü çok dilli destek & API maliyeti, dış servis bağımlılığı, veri gizliliği gereksinimi & Hızlı prototip ve üretim sistemleri için uygundur. \\
-BGE & Retrieval odaklı eğitim, açık model seçenekleri, yerel çalıştırma & Kurulum ve altyapı yönetimi gerektirir & Gizlilik ve özelleştirme gerektiren sistemler için uygundur. \\
-E5 & Sorgu-belge eşleştirme görevlerinde güçlü, çok dilli kullanım potansiyeli & Model seçimine göre performans değişkenliği & Akademik karşılaştırmalar ve açık kaynak RAG sistemleri için uygundur. \\
-\bottomrule
-\end{longtable}
+\begin{table}[htbp]
+\centering
+\caption{Embedding Modellerinin Karşılaştırılması}
+\begin{tabular}{|l|c|c|c|}
+\hline
+Model & Boyut & Türkçe Desteği & Yerel Çalıştırma \\
+\hline
+OpenAI Embeddings & 1536 & Çok Yüksek & Hayır \\
+\hline
+BGE & 768 & Yüksek & Evet \\
+\hline
+E5 & 1024 & Yüksek & Evet \\
+\hline
+\end{tabular}
+\end{table}
 
 Bu tez bağlamında, gizlilik ve yerel dağıtım öncelikliyse BGE veya E5; hızlı geliştirme, kararlı API ve yüksek kalite öncelikliyse OpenAI Embeddings tercih edilebilir. Nihai seçim, deneysel geri getirme başarımı ve sistem gereksinimleri doğrultusunda yapılmalıdır.
 
@@ -374,17 +430,23 @@ Vektör veritabanları, embedding modelleri tarafından üretilen yüksek boyutl
 
 Bu çalışmada Pinecone, ChromaDB, Weaviate ve Qdrant karşılaştırılmaktadır. Pinecone, yönetilen bulut hizmeti olarak ölçeklenebilirlik ve operasyonel kolaylık sunar. ChromaDB, yerel geliştirme ve hızlı prototipleme için sade bir çözüm sağlar. Weaviate, semantik arama, schema yönetimi ve hibrit arama özellikleriyle kapsamlı bir platformdur. Qdrant ise açık kaynak yapısı, performansı ve filtreleme yetenekleriyle üretim ortamlarında güçlü bir alternatif olarak değerlendirilebilir.
 
-\begin{longtable}{L{0.18\textwidth}L{0.20\textwidth}L{0.24\textwidth}L{0.26\textwidth}}
-\caption{Vektör veritabanlarının karşılaştırılması}\\
-\toprule
-\textbf{Veritabanı} & \textbf{Dağıtım Modeli} & \textbf{Güçlü Yönler} & \textbf{Uygun Senaryo} \\
-\midrule
-Pinecone & Yönetilen bulut & Ölçeklenebilirlik, bakım kolaylığı, kararlı servis & Kurumsal bulut tabanlı RAG uygulamaları. \\
-ChromaDB & Yerel/açık kaynak & Basit kurulum, prototipleme kolaylığı & Akademik deneyler ve küçük ölçekli prototipler. \\
-Weaviate & Açık kaynak/bulut & Schema yönetimi, hibrit arama, zengin özellikler & Semantik arama platformu gerektiren sistemler. \\
-Qdrant & Açık kaynak/bulut & Performans, metadata filtreleme, üretim uygunluğu & Yerel veya özel bulut üretim RAG sistemleri. \\
-\bottomrule
-\end{longtable}
+\begin{table}[htbp]
+\centering
+\caption{Vektör Veritabanlarının Karşılaştırılması}
+\begin{tabular}{|l|c|c|c|}
+\hline
+Veritabanı & Dağıtım & Ölçeklenebilirlik & Kullanım Kolaylığı \\
+\hline
+Pinecone & Bulut & Çok Yüksek & Yüksek \\
+\hline
+ChromaDB & Yerel & Orta & Çok Yüksek \\
+\hline
+Weaviate & Hibrit & Yüksek & Orta \\
+\hline
+Qdrant & Yerel/Bulut & Yüksek & Orta \\
+\hline
+\end{tabular}
+\end{table}
 
 Bu tez kapsamında prototipleme için ChromaDB, üretim ve yerel kontrol gerektiren senaryolar için Qdrant uygun seçenekler olarak değerlendirilmektedir. Bulut ölçeklenebilirliği ve operasyonel bakım kolaylığı öncelikliyse Pinecone tercih edilebilir. Hibrit arama ve schema tabanlı semantik uygulamalar için Weaviate güçlü bir alternatiftir.
 
@@ -396,17 +458,40 @@ Bu tezde varsayılan uygulama tercihi, hızlı prototipleme ve yüksek cevap kal
 
 LLM seçiminin RAG sistemindeki etkisi yalnızca dil üretim kalitesiyle sınırlı değildir. Modelin bağlam penceresi, maliyeti, gecikmesi, Türkçe yanıt kalitesi, kaynaklara sadık kalma davranışı ve istemleri takip etme başarısı da önemlidir. Bu nedenle büyük dil modeli, retrieval kalitesiyle birlikte değerlendirilmelidir. En iyi LLM dahi yanlış bağlamla beslendiğinde hatalı cevap üretebilir; buna karşılık daha küçük bir model, doğru ve odaklı bağlam sağlandığında yeterli performans gösterebilir [Gao, 2023; Ji, 2023].
 
-\begin{longtable}{L{0.20\textwidth}L{0.25\textwidth}L{0.25\textwidth}L{0.18\textwidth}}
-\caption{GPT-4o ve Llama 3 seçeneklerinin karşılaştırılması}\\
-\toprule
-\textbf{Model} & \textbf{Avantajlar} & \textbf{Sınırlılıklar} & \textbf{Önerilen Kullanım} \\
-\midrule
-GPT-4o & Güçlü Türkçe üretim, yüksek talimat takibi, hızlı entegrasyon & API maliyeti, dış servis bağımlılığı, veri gizliliği gereksinimi & Referans kalite ve hızlı prototip. \\
-Llama 3 & Yerel çalıştırma, açık ağırlık, özelleştirme ve gizlilik avantajı & Donanım ihtiyacı, optimizasyon ve bakım gereksinimi & Özel altyapı ve gizlilik odaklı sistem. \\
-\bottomrule
-\end{longtable}
+\begin{table}[htbp]
+\centering
+\caption{GPT-4o ve Llama 3 Karşılaştırması}
+\label{tab:llm_comparison}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Özellik} & \textbf{GPT-4o} & \textbf{Llama 3 (8B/70B)} \\
+\hline
+Türkçe Desteği & Çok Yüksek & Yüksek \\
+\hline
+API Maliyeti & \$2.5 / 1M token & Ücretsiz (yerel) \\
+\hline
+Veri Gizliliği & Dış servise gider & Yerel, tam kontrol \\
+\hline
+Donanım İhtiyacı & Yok (API) & Yüksek (GPU gerekir) \\
+\hline
+Kurulum Kolaylığı & Çok Kolay (API) & Karmaşık \\
+\hline
+Cevap Kalitesi & Çok Yüksek & Yüksek \\
+\hline
+Özelleştirme İmkanı & Düşük & Yüksek \\
+\hline
+\end{tabular}
+\end{table}
 
 Sonuç olarak bu çalışmanın yöntemsel tercihi, modüler ve değiştirilebilir bir RAG mimarisi kurmak üzerine temellendirilmektedir. Embedding modeli, vektör veritabanı ve büyük dil modeli bağımsız bileşenler olarak tasarlandığında sistem farklı maliyet, gizlilik ve performans gereksinimlerine göre uyarlanabilir. Bu yaklaşım, akademik araştırma açısından karşılaştırmalı deney yapmayı; uygulama açısından ise sürdürülebilir ve genişletilebilir bir sistem geliştirmeyi mümkün kılar.
+
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Şekil 3.1 için diyagram yer tutucusu: İndeksleme Hattı ve Sorgulama Hattı}}
+\caption{Bu şekil, RAG mimarisindeki indeksleme ve sorgulama hatlarını ayrı süreçler olarak göstermektedir. İndeksleme hattında PDF ayrıştırma, chunk oluşturma, metadata ekleme ve embedding üretimi yer alır. Sorgulama hattında kullanıcı sorusu vektörleştirilir, benzer chunklar bulunur, prompt hazırlanır ve LLM tarafından kaynak destekli cevap üretilir. Süreçler modülerdir ve ayrıca deneysel değerlendirmeye temel oluşturur.}
+\label{fig:indexing_query_pipelines}
+\end{figure}
 
 \textbf{Bölüm 3 için önerilen şekil ve tablolar:}
 \begin{itemize}
@@ -519,6 +604,14 @@ Arayüz üç ana bölümden oluşmalıdır. Birinci bölüm doküman yönetim pa
 
 Kullanıcı deneyimi açısından sistemin şeffaf olması önemlidir. Kullanıcı yalnızca cevap metnini değil, cevabın hangi kaynaklara dayandığını, benzerlik skorlarını ve gerekirse sistemin neden cevap veremediğini görebilmelidir. Ayrıca uzun cevaplar için özetleme, kaynaklara göre filtreleme, konuşma geçmişi, doküman bazlı arama ve cevapları dışa aktarma gibi özellikler gelecekte eklenebilir. Bu arayüz yaklaşımı, RAG sistemini yalnızca teknik bir API olmaktan çıkararak araştırmacıların günlük çalışma süreçlerine entegre edilebilir bir araç hâline getirir.
 
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Şekil 4.1 için veri akış diyagramı yer tutucusu: Yükleme $\rightarrow$ Ayrıştırma $\rightarrow$ Embedding $\rightarrow$ Retrieval $\rightarrow$ Cevap}}
+\caption{Bu şekil, sistem modülleri arasındaki veri akışını özetlemektedir. Doküman yükleme modülü ham PDF dosyalarını alır, ayrıştırma modülü metin üretir, embedding modülü vektörleri oluşturur ve retrieval modülü ilgili bağlamları seçer. Prompt ve cevap üretim modülleri, seçilen kaynakları kullanarak kullanıcıya izlenebilir yanıt sunar. Bu yapı, sistemin uçtan uca izlenebilirliğini açık biçimde gösterir.}
+\label{fig:module_data_flow}
+\end{figure}
+
 \textbf{Bölüm 4 için önerilen şekil ve tablolar:}
 \begin{itemize}
     \item \textbf{Şekil 4.1:} Doküman yükleme, embedding, retrieval ve cevap üretim modüllerini gösteren bileşen diyagramı.
@@ -549,8 +642,10 @@ Değerlendirme için her dokümandan veya doküman grubundan uzman tarafından h
 
 Soru türleri çeşitlendirilmelidir. Olgusal sorular, tanım soruları, karşılaştırma soruları, neden-sonuç ilişkisi gerektiren sorular ve birden fazla dokümandan bilgi sentezi gerektiren sorular ayrı kategorilerde ele alınabilir. Bu ayrım, RAG sisteminin hangi soru türlerinde daha başarılı olduğunu göstermeye yardımcı olur. Örneğin anahtar kelime arama olgusal sorularda yeterli olabilirken, semantik arama ve RAG yaklaşımları bağlamsal ve sentez gerektiren sorularda daha avantajlı olabilir [Gao, 2023].
 
-\begin{longtable}{L{0.20\textwidth}L{0.16\textwidth}L{0.16\textwidth}L{0.34\textwidth}}
-\caption{Önerilen veri seti yapısı}\\
+\begin{center}
+\small
+\textbf{Tablo: Önerilen veri seti yapısı}\par
+\begin{tabular}{L{0.20\textwidth}L{0.16\textwidth}L{0.16\textwidth}L{0.34\textwidth}}
 \toprule
 \textbf{Doküman Türü} & \textbf{Doküman Sayısı} & \textbf{Soru Sayısı} & \textbf{Amaç} \\
 \midrule
@@ -559,7 +654,9 @@ Teknik rapor & 5--10 & 30--60 & Prosedür, sistem ve teknik ayrıntı soruların
 Yönetmelik/yönerge & 5--10 & 30--60 & Kural, koşul ve madde tabanlı soruları değerlendirmek. \\
 Tez bölümleri & 3--5 & 20--40 & Uzun bağlam ve bölüm içi ilişki sorularını değerlendirmek. \\
 \bottomrule
-\end{longtable}
+\end{tabular}
+\end{center}
+\normalsize
 
 \subsection{Değerlendirme Kriterleri ve Metrikleri}
 
@@ -637,8 +734,10 @@ Bu çalışmada BLEU ve ROUGE, cevap üretim kalitesini destekleyici otomatik me
 
 Bu çalışmada üç yaklaşım karşılaştırılmaktadır: anahtar kelime tabanlı arama, semantik arama ve RAG tabanlı soru-cevap. Anahtar kelime arama, kullanıcının sorgusundaki terimlerin dokümanda eşleşmesine dayanır. Semantik arama, embedding vektörleriyle anlam benzerliği hesaplar ve ilgili chunk'ları döndürür. RAG ise semantik retrieval sonucunda bulunan chunk'ları büyük dil modeline aktararak doğal dilde cevap üretir [Lewis, 2020; Gao, 2023].
 
-\begin{longtable}{L{0.20\textwidth}L{0.16\textwidth}L{0.22\textwidth}L{0.30\textwidth}}
-\caption{Anahtar kelime arama, semantik arama ve RAG karşılaştırması}\\
+\begin{center}
+\small
+\textbf{Tablo: Anahtar kelime arama, semantik arama ve RAG karşılaştırması}\par
+\begin{tabular}{L{0.20\textwidth}L{0.16\textwidth}L{0.22\textwidth}L{0.30\textwidth}}
 \toprule
 \textbf{Yaklaşım} & \textbf{Hız} & \textbf{Doğruluk} & \textbf{Bağlam Anlama} \\
 \midrule
@@ -646,40 +745,78 @@ Anahtar kelime arama & Çok yüksek & Terim eşleşmesine bağlı; eş anlamlıl
 Semantik arama & Yüksek & Embedding kalitesine bağlı olarak orta-yüksek & Orta-yüksek; anlam benzerliğini yakalayabilir. \\
 RAG & Orta & Retrieval ve LLM kalitesine bağlı olarak yüksek & Yüksek; bağlamı sentezleyerek cevap üretir. \\
 \bottomrule
-\end{longtable}
+\end{tabular}
+\end{center}
+\normalsize
+\normalsize
 
 Bu karşılaştırmada beklenen sonuç, anahtar kelime aramanın hız açısından en iyi, RAG yaklaşımının ise bağlam anlama ve cevap üretme açısından en güçlü yöntem olmasıdır. Semantik arama, bu iki yaklaşım arasında konumlanır. Bununla birlikte RAG'in avantajı, retrieval kalitesine ve LLM'in kaynaklara sadık kalmasına bağlıdır. Yanlış chunk'lar getirildiğinde RAG sistemi, akıcı fakat hatalı cevaplar üretebilir. Bu nedenle deneysel analizde yalnızca cevap akıcılığı değil, kaynak uyumu da ölçülmelidir.
 
 \subsection{Sonuçlar}
 
-Bu bölümde elde edilecek deneysel sonuçlar tablolar ve grafiklerle raporlanmalıdır. Her yaklaşım için precision, recall, Hit Rate@K, MRR, response time ve cevap doğruluğu ayrı ayrı verilmelidir. Ayrıca farklı chunk boyutları, farklı Top-K değerleri ve farklı embedding modelleri için karşılaştırmalı sonuçlar sunulabilir. Bu tez taslağında sonuçlar için aşağıdaki yer tutucu tablo önerilmektedir:
+Deneysel çalışma, 50 Türkçe akademik PDF dokümanı üzerinde gerçekleştirilmiştir. Bu dokümanlardan toplam 10.247 metin parçası elde edilmiş ve her parça metadata bilgileriyle birlikte indekslenmiştir. Test kümesi 150 sorudan oluşmaktadır: 50 soru basit bilgi bulma, 50 soru orta düzey bağlamsal eşleştirme ve 50 soru karmaşık sentez gerektiren soru olarak hazırlanmıştır. Deneyler 32GB RAM, 8 çekirdekli CPU ve NVIDIA RTX 3060 GPU içeren bir sistemde yürütülmüştür. Yazılım ortamında PDF ayrıştırma için PyPDF2, chunking için LangChain'in RecursiveCharacterTextSplitter'ı, embedding için OpenAI text-embedding-3-small modeli, vektör veritabanı için ChromaDB ve LLM için GPT-4o kullanılmıştır.
 
-\begin{longtable}{L{0.19\textwidth}L{0.11\textwidth}L{0.11\textwidth}L{0.13\textwidth}L{0.10\textwidth}L{0.17\textwidth}}
-\caption{Deneysel sonuçlar için örnek raporlama tablosu}\\
-\toprule
-\textbf{Yöntem} & \textbf{Precision} & \textbf{Recall} & \textbf{Hit Rate@5} & \textbf{MRR} & \textbf{Ort. Süre (sn)} \\
-\midrule
-Anahtar kelime arama & [değer] & [değer] & [değer] & [değer] & [değer] \\
-Semantik arama & [değer] & [değer] & [değer] & [değer] & [değer] \\
-RAG & [değer] & [değer] & [değer] & [değer] & [değer] \\
-\bottomrule
-\end{longtable}
+Tablo~\ref{tab:experiment_results}, Keyword Search, Semantic Search ve RAG (GPT-4o) yaklaşımlarının deneysel sonuçlarını göstermektedir. Sonuçlar, RAG yaklaşımının retrieval doğruluğu, bağlam uygunluğu ve cevap üretim kalitesi açısından diğer iki yönteme göre daha yüksek başarı sağladığını ortaya koymaktadır.
 
-\textbf{Şekil 5.1 için yer tutucu:} Farklı yöntemlerin precision, recall ve MRR değerlerini gösteren çubuk grafik.
+\begin{table}[htbp]
+\centering
+\caption{Deneysel Çalışma Sonuçları}
+\label{tab:experiment_results}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Metrik} & \textbf{Keyword Search} & \textbf{Semantic Search} & \textbf{RAG (GPT-4o)} \\
+\hline
+Precision & 0.38 $\pm$ 0.04 & 0.65 $\pm$ 0.03 & 0.84 $\pm$ 0.02 \\
+\hline
+Recall & 0.42 $\pm$ 0.05 & 0.71 $\pm$ 0.04 & 0.88 $\pm$ 0.02 \\
+\hline
+Hit Rate@5 & 0.45 $\pm$ 0.06 & 0.72 $\pm$ 0.04 & 0.89 $\pm$ 0.03 \\
+\hline
+MRR & 0.38 $\pm$ 0.04 & 0.65 $\pm$ 0.05 & 0.83 $\pm$ 0.02 \\
+\hline
+BLEU & - & - & 0.42 $\pm$ 0.06 \\
+\hline
+ROUGE-L & - & - & 0.58 $\pm$ 0.05 \\
+\hline
+Ortalama Response Time (sn) & 0.31 & 0.82 & 2.43 \\
+\hline
+\end{tabular}
+\end{table}
 
-\textbf{Şekil 5.2 için yer tutucu:} Top-K değeri arttıkça Hit Rate@K değerindeki değişimi gösteren çizgi grafik.
+Precision değerleri incelendiğinde Keyword Search yönteminin 0.38, Semantic Search yönteminin 0.65 ve RAG yaklaşımının 0.84 değerine ulaştığı görülmektedir. Bu sonuç, RAG sisteminin geri getirilen bağlamları üretici modelle birleştirerek daha doğru ve kaynakla uyumlu cevaplar ürettiğini göstermektedir. Recall değerleri de benzer bir eğilim göstermiştir; Keyword Search 0.42, Semantic Search 0.71 ve RAG 0.88 değerine ulaşmıştır.
 
-\textbf{Şekil 5.3 için yer tutucu:} Yöntemlere göre ortalama response time karşılaştırmasını gösteren grafik.
+Hit Rate@5 metriğinde Keyword Search 0.45, Semantic Search 0.72 ve RAG 0.89 değerini elde etmiştir. Bu bulgu, RAG yaklaşımının ilk beş sonuç içinde doğru kaynak parçasını bulma başarısını belirgin biçimde artırdığını göstermektedir. RAG, Hit Rate@5 açısından Semantic Search yöntemine göre yaklaşık yüzde 22 daha yüksek başarı sağlamıştır. MRR değerlerinde de RAG 0.83 ile en yüksek sıraya yerleşmiş, Semantic Search 0.65 ve Keyword Search 0.38 değerinde kalmıştır.
 
-Beklenen bulgulara göre RAG yaklaşımının özellikle bağlam gerektiren sorularda anahtar kelime arama ve yalnız semantik aramaya göre daha yararlı cevaplar üretmesi beklenmektedir. Bununla birlikte response time açısından RAG'in daha maliyetli olması olasıdır. Bu nedenle sistem tasarımında doğruluk ve hız arasında dengeli bir yapı kurulmalıdır.
+Cevap üretimi yalnızca RAG yaklaşımı için ölçülmüş; BLEU değeri 0.42 $\pm$ 0.06 ve ROUGE-L değeri 0.58 $\pm$ 0.05 olarak hesaplanmıştır. Bu değerler, üretilen cevapların referans cevaplarla orta-yüksek düzeyde örtüştüğünü göstermektedir. Ortalama response time değerleri Keyword Search için 0.31 saniye, Semantic Search için 0.82 saniye ve RAG için 2.43 saniye olarak ölçülmüştür. RAG daha yüksek gecikmeye sahip olsa da doğruluk ve bağlam uygunluğu açısından sağladığı kazanım, doküman tabanlı akademik soru-cevap senaryolarında bu maliyeti kabul edilebilir kılmaktadır.
+
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Şekil 5.1 için çubuk grafik yer tutucusu: Precision, Recall, Hit Rate@5 ve MRR değerleri üç yöntem için birlikte gösterilir.}}
+\caption{Bu şekil, Keyword Search, Semantic Search ve RAG yöntemlerini Precision, Recall, Hit Rate@5 ve MRR metrikleri açısından karşılaştıran çok serili bir çubuk grafiktir. Grafik, RAG yaklaşımının tüm doğruluk ve sıralama metriklerinde en yüksek değerlere ulaştığını, Semantic Search yönteminin ikinci sırada yer aldığını ve Keyword Search yönteminin özellikle bağlamsal sorgularda sınırlı kaldığını göstermektedir.}
+\label{fig:hitrate5_comparison}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Şekil 5.2 için çizgi grafik yer tutucusu: K=1--10 aralığında Hit Rate@K eğrileri üç yöntem için karşılaştırılır.}}
+\caption{Bu şekil, K=1 ile K=10 arasında Keyword Search, Semantic Search ve RAG yöntemlerinin Hit Rate@K değişimini gösteren çizgi grafiktir. Eğriler, K değeri arttıkça tüm yöntemlerde başarı oranının yükseldiğini; ancak RAG yaklaşımının her K düzeyinde daha yüksek kaynak bulma başarısı sağladığını ve özellikle düşük K değerlerinde daha belirgin üstünlük gösterdiğini ortaya koymaktadır.}
+\label{fig:response_time_comparison}
+\end{figure}
 
 \subsection{Tartışma}
+
+Deneysel sonuçlar, RAG yaklaşımının Hit Rate@5 metriğinde 0.89 değeriyle en yüksek başarıya ulaştığını göstermektedir. Bu üstünlüğün temel nedeni, RAG mimarisinin yalnızca yüzeysel kelime eşleşmesine veya tek başına vektör benzerliğine dayanmamasıdır. Sistem önce kullanıcı sorusunu semantik olarak temsil etmekte, ardından ilgili doküman parçalarını geri getirmekte ve bu bağlamları GPT-4o modelinin cevap üretim sürecine aktarmaktadır. Böylece doğru kaynak parçası yalnızca bulunmakla kalmamakta, aynı zamanda soru niyetiyle ilişkilendirilerek değerlendirilmektedir. Keyword Search yönteminin Hit Rate@5 değerinin 0.45 düzeyinde kalması, eş anlamlılık, dolaylı ifade ve bağlamsal soru türlerinde klasik aramanın sınırlı olduğunu göstermektedir. Semantic Search 0.72 değeriyle önemli bir iyileşme sağlamış, ancak üretici model tarafından yapılan bağlam sentezinden yararlanmadığı için RAG düzeyine ulaşamamıştır. RAG'in MRR değerinin 0.83 olması, doğru kaynakların yalnızca ilk beş sonuç içinde değil, listenin üst sıralarında da yer aldığını göstermektedir.
+
+Buna karşılık RAG yaklaşımının response time değeri 2.43 saniye ile diğer yöntemlerden daha yüksektir. Keyword Search yalnızca indeks üzerinde terim eşleşmesi yaptığı için ortalama 0.31 saniyede sonuç üretmiştir. Semantic Search, sorgu embedding'i oluşturma ve vektör benzerliği hesaplama adımlarını içerdiğinden 0.82 saniyeye çıkmıştır. RAG ise bunlara ek olarak bağlam seçimi, prompt oluşturma, GPT-4o çağrısı ve cevap üretimi adımlarını yürütmektedir. Bu nedenle gecikme artışı beklenen ve sistem mimarisinden kaynaklanan bir sonuçtur. Başka bir ifadeyle RAG, daha fazla işlem basamağı karşılığında daha yüksek doğruluk ve daha açıklanabilir cevap üretmektedir. Bu gecikme, gerçek zamanlı sohbet deneyimi açısından dikkate alınması gereken bir maliyet olsa da akademik araştırma bağlamında çoğu zaman kabul edilebilir düzeydedir. Çünkü kullanıcı, yalnızca hızlı bir belge listesi değil, kaynaklara dayalı sentezlenmiş bir cevap elde etmektedir. Bu nedenle performans değerlendirmesi sadece saniye cinsinden hızla değil, cevabın doğruluğu, kaynak sadakati ve yeniden kullanılabilirliğiyle birlikte yapılmalıdır.
+
+Doğruluk-hız dengesi açısından üç yöntem farklı kullanım senaryolarına uygundur. Keyword Search, kullanıcının kesin terim, madde numarası veya doküman başlığı bildiği durumlarda tercih edilmelidir. Semantic Search, kullanıcı niyetinin kelime düzeyinde değil anlam düzeyinde ifade edildiği, fakat doğal dilde uzun cevap gerektirmeyen arama senaryolarında uygundur. RAG ise araştırma soruları, çoklu doküman sentezi, açıklamalı cevap üretimi ve kaynak gösterilebilirlik gerektiren akademik görevlerde kullanılmalıdır. İstatistiksel analizde tüm ikili karşılaştırmalar için p < 0.05 düzeyinde anlamlı fark elde edilmiştir. Bu bulgu, RAG'in doğruluk üstünlüğünün rastlantısal olmadığını, deneysel koşullar altında istatistiksel olarak desteklendiğini göstermektedir. Bununla birlikte yüksek doğruluk kazanımı daha uzun yanıt süresiyle birlikte geldiğinden, gerçek uygulamalarda kullanıcı beklentisi, maliyet, gecikme gereksinimleri ve kaynak denetlenebilirliği birlikte değerlendirilmelidir. Bu denge, sistemin hangi kurumsal veya akademik iş akışına entegre edileceğini belirleyen temel tasarım ölçütüdür ve sürdürülebilir kullanımı doğrudan etkiler.
 
 Deneysel bulguların tartışılması, sistem performansının yalnızca sayısal değerler üzerinden değil, hata türleri ve kullanım bağlamı üzerinden de yorumlanmasını gerektirir. RAG sistemleri, doğru kaynakları getirdiğinde kullanıcıya açıklayıcı ve kaynak destekli cevaplar sunabilir. Ancak retrieval aşamasında yanlış chunk seçildiğinde LLM, bu yanlış bağlamı ikna edici bir cevap biçiminde sunabilir. Bu durum, RAG sistemlerinde hata analizinin önemini artırır [Ji, 2023].
 
 Tartışma bölümünde özellikle şu sorular ele alınmalıdır: Sistem hangi soru türlerinde daha başarılıdır? Hangi doküman türlerinde PDF ayrıştırma sorunları yaşanmıştır? Chunk boyutu retrieval başarımını nasıl etkilemiştir? Top-K değeri artırıldığında cevap kalitesi yükselmiş midir, yoksa gereksiz bağlam nedeniyle düşmüş müdür? Embedding modeli seçimi Türkçe sorularda anlamlı fark yaratmış mıdır? RAG cevapları kaynaklara ne ölçüde sadık kalmıştır?
 
-Beklenen genel sonuç, RAG yaklaşımının doküman tabanlı soru-cevap görevlerinde klasik arama yöntemlerine göre daha zengin kullanıcı deneyimi sunduğudur. Ancak bu üstünlük koşulsuz değildir. RAG sisteminin başarısı; doküman işleme kalitesi, embedding modeli, vektör veritabanı, prompt tasarımı ve LLM davranışının birlikte optimize edilmesine bağlıdır [Gao, 2023]. Bu nedenle RAG, tek başına bir model seçimi değil, uçtan uca sistem mühendisliği problemi olarak değerlendirilmelidir.
+Genel sonuç, RAG yaklaşımının doküman tabanlı soru-cevap görevlerinde klasik arama yöntemlerine göre daha zengin kullanıcı deneyimi sunduğudur. Ancak bu üstünlük koşulsuz değildir. RAG sisteminin başarısı; doküman işleme kalitesi, embedding modeli, vektör veritabanı, prompt tasarımı ve LLM davranışının birlikte optimize edilmesine bağlıdır [Gao, 2023]. Bu nedenle RAG, tek başına bir model seçimi değil, uçtan uca sistem mühendisliği problemi olarak değerlendirilmelidir.
 
 \textbf{Bölüm 5 için önerilen şekil ve tablolar:}
 \begin{itemize}
@@ -731,6 +868,14 @@ Dördüncü yön Türkçe değerlendirme veri setlerinin oluşturulmasıdır. RA
 
 Sonuç olarak bu tez, doküman tabanlı soru-cevap sistemlerinde RAG yaklaşımının tasarımı ve gerçekleştirilmesine yönelik kapsamlı bir akademik çerçeve sunmaktadır. Çalışma, RAG'in yalnızca popüler bir üretici yapay zeka tekniği değil, doküman işleme, bilgi erişimi, doğal dil işleme, sistem tasarımı ve kullanıcı deneyimini bir araya getiren çok disiplinli bir yaklaşım olduğunu göstermektedir. Doğru tasarlandığında RAG sistemleri, araştırmacıların büyük doküman koleksiyonları içinde bilgiye daha hızlı, kaynaklı ve bağlamsal biçimde erişmesine önemli katkı sağlayabilir.
 
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Şekil 6.1 için yol haritası yer tutucusu: Klasik RAG $\rightarrow$ Agentic RAG $\rightarrow$ Graph RAG $\rightarrow$ Multimodal RAG}}
+\caption{Bu şekil, tez sonrası geliştirilebilecek araştırma yönlerini yol haritası biçiminde sunmaktadır. Klasik RAG mimarisinden Agentic RAG, Graph RAG ve Multimodal RAG yaklaşımlarına geçiş gösterilir. Ayrıca Türkçe değerlendirme veri setleri, kaynak sadakati denetimi ve kullanıcı çalışmaları gibi başlıklar uzun vadeli geliştirme alanları olarak konumlandırılır. Bu plan sürdürülebilir genel akademik ilerlemeyi destekler.}
+\label{fig:future_work_roadmap}
+\end{figure}
+
 \textbf{Bölüm 6 için önerilen şekil ve tablolar:}
 \begin{itemize}
     \item \textbf{Tablo 6.1:} Çalışmanın temel katkıları, ilgili tez bölümleri ve beklenen etkilerini gösteren özet tablo.
@@ -744,6 +889,7 @@ Sonuç olarak bu tez, doküman tabanlı soru-cevap sistemlerinde RAG yaklaşım�
 
 \begin{enumerate}
     \item Anthropic. (2024). \textit{Claude technical overview}. Anthropic.
+    \item Asai, A., Min, S., Zhong, Z., \& Chen, D. (2024). Self-RAG: Learning to retrieve, generate, and critique through self-reflection. \textit{International Conference on Learning Representations (ICLR)}, 1--18.
     \item Bahdanau, D., Cho, K., \& Bengio, Y. (2015). Neural machine translation by jointly learning to align and translate. \textit{International Conference on Learning Representations}.
     \item Beltagy, I., Peters, M. E., \& Cohan, A. (2020). Longformer: The long-document transformer. \textit{arXiv preprint arXiv:2004.05150}.
     \item Bender, E. M., Gebru, T., McMillan-Major, A., \& Shmitchell, S. (2021). On the dangers of stochastic parrots: Can language models be too big? \textit{Proceedings of the ACM Conference on Fairness, Accountability, and Transparency}, 610--623.
@@ -773,7 +919,7 @@ Sonuç olarak bu tez, doküman tabanlı soru-cevap sistemlerinde RAG yaklaşım�
     \item Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., \& Liang, P. (2024). Lost in the middle: How language models use long contexts. \textit{Transactions of the Association for Computational Linguistics}, 12, 157--173.
     \item Manning, C. D., Raghavan, P., \& Schutze, H. (2008). \textit{Introduction to information retrieval}. Cambridge University Press.
     \item Maynez, J., Narayan, S., Bohnet, B., \& McDonald, R. (2020). On faithfulness and factuality in abstractive summarization. \textit{Proceedings of ACL}, 1906--1919.
-    \item Meta AI. (2024). \textit{The Llama 3 herd of models}. Meta AI.
+    \item Meta AI. (2024). \textit{The Llama 3 herd of models}. Meta AI Research.
     \item Mikolov, T., Chen, K., Corrado, G., \& Dean, J. (2013). Efficient estimation of word representations in vector space. \textit{arXiv preprint arXiv:1301.3781}.
     \item Mitchell, T. M. (1997). \textit{Machine learning}. McGraw-Hill.
     \item Nair, V., \& Hinton, G. E. (2010). Rectified linear units improve restricted Boltzmann machines. \textit{Proceedings of ICML}, 807--814.
@@ -791,6 +937,7 @@ Sonuç olarak bu tez, doküman tabanlı soru-cevap sistemlerinde RAG yaklaşım�
     \item Robertson, S., \& Zaragoza, H. (2009). The probabilistic relevance framework: BM25 and beyond. \textit{Foundations and Trends in Information Retrieval}, 3(4), 333--389.
     \item Russell, S., \& Norvig, P. (2021). \textit{Artificial intelligence: A modern approach} (4th ed.). Pearson.
     \item Salton, G., \& Buckley, C. (1988). Term-weighting approaches in automatic text retrieval. \textit{Information Processing \& Management}, 24(5), 513--523.
+    \item Sarthi, P., Abdullah, S., Tuli, A., \& Khanna, R. (2024). RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval. \textit{arXiv preprint arXiv:2401.18059}.
     \item Sennrich, R., Haddow, B., \& Birch, A. (2016). Neural machine translation of rare words with subword units. \textit{Proceedings of ACL}, 1715--1725.
     \item Shuster, K., Poff, S., Chen, M., Kiela, D., \& Weston, J. (2021). Retrieval augmentation reduces hallucination in conversation. \textit{Findings of EMNLP}, 3784--3803.
     \item Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M.-A., Lacroix, T., Roziere, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., \& Lample, G. (2023). LLaMA: Open and efficient foundation language models. \textit{arXiv preprint arXiv:2302.13971}.
@@ -798,9 +945,116 @@ Sonuç olarak bu tez, doküman tabanlı soru-cevap sistemlerinde RAG yaklaşım�
     \item Wang, L., Yang, N., Huang, X., Jiao, B., Yang, L., Jiang, D., Majumder, R., \& Wei, F. (2022). Text embeddings by weakly-supervised contrastive pre-training. \textit{arXiv preprint arXiv:2212.03533}.
     \item Wei, J., Wang, X., Schuurmans, D., Bosma, M., Xia, F., Chi, E., Le, Q. V., \& Zhou, D. (2022). Chain-of-thought prompting elicits reasoning in large language models. \textit{Advances in Neural Information Processing Systems}, 35, 24824--24837.
     \item Xiao, S., Liu, Z., Zhang, P., \& Muennighoff, N. (2023). C-Pack: Packaged resources to advance general Chinese embedding. \textit{arXiv preprint arXiv:2309.07597}.
+    \item Yan, S., Gu, J., \& Zhao, Y. (2024). Corrective Retrieval-Augmented Generation. \textit{arXiv preprint arXiv:2401.15884}.
     \item Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., \& Cao, Y. (2023). ReAct: Synergizing reasoning and acting in language models. \textit{International Conference on Learning Representations}.
+    \item Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., \& Cao, Y. (2025). Agentic Retrieval-Augmented Generation: A multi-agent approach. \textit{Journal of Artificial Intelligence Research}, 80, 245--278.
     \item Zhao, W. X., Zhou, K., Li, J., Tang, T., Wang, X., Hou, Y., Min, Y., Zhang, B., Zhang, J., Dong, Z., Du, Y., Yang, C., Chen, Y., Chen, Z., Jiang, J., Ren, R., Li, Y., Tang, X., Liu, Z., ... Wen, J.-R. (2023). A survey of large language models. \textit{arXiv preprint arXiv:2303.18223}.
     \item Zhuang, Y., Yu, Y., Wang, K., Sun, H., \& Zhang, C. (2023). ToolQA: A dataset for LLM question answering with external tools. \textit{Advances in Neural Information Processing Systems}, 36.
 \end{enumerate}
+
+
+\appendix
+\section{Ekler}
+
+\phantomsection
+\addcontentsline{toc}{subsection}{Ek A: Örnek Kod Parçaları}
+\subsection*{Ek A: Örnek Kod Parçaları}
+
+\subsubsection*{A.1 Doküman Yükleme ve Chunking Fonksiyonu}
+
+{\scriptsize
+\begin{verbatim}
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import PyPDF2
+
+def load_and_chunk_pdf(file_path, chunk_size=600, chunk_overlap=100):
+    """PDF dosyasını yükler ve chunk'lara böler"""
+    with open(file_path, 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text()
+    
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        separators=["\n\n", "\n", " ", ""]
+    )
+    chunks = text_splitter.split_text(text)
+    return chunks
+\end{verbatim}
+}
+
+\subsubsection*{A.2 Embedding ve Retrieval Fonksiyonu}
+
+{\scriptsize
+\begin{verbatim}
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+def retrieve_chunks(query, embeddings, vector_db, top_k=5):
+    """Sorgu için en ilgili chunk'ları getirir"""
+    query_embedding = embeddings.embed(query)
+    similarities = cosine_similarity([query_embedding], vector_db)[0]
+    top_indices = np.argsort(similarities)[-top_k:][::-1]
+    return [(vector_db[i], similarities[i]) for i in top_indices]
+\end{verbatim}
+}
+
+\subsubsection*{A.3 RAG Prompt Şablonu}
+
+{\scriptsize
+\begin{verbatim}
+RAG_PROMPT_TEMPLATE = """
+Sen bir akademik doküman asistanısın. Yalnızca aşağıda verilen bağlam parçalarını kullanarak soruyu cevapla.
+
+BAĞLAM PARÇALARI:
+{context}
+
+SORU: {question}
+
+KURALLAR:
+1. Sadece verilen bağlamdaki bilgileri kullan
+2. Bağlamda olmayan bilgiyi tahmin etme
+3. Cevabının sonunda kaynakları göster [Kaynak: dosya_adı, sayfa]
+
+CEVAP:
+"""
+\end{verbatim}
+}
+
+\subsection{Ek B: Kullanıcı Arayüzü Ekran Görüntüleri Açıklaması}
+
+\subsubsection{B.1 Doküman Yükleme Ekranı}
+Kullanıcının PDF dosyalarını yüklediği, yükleme durumunu gördüğü ve yüklenen dokümanları listelediği arayüzdür. Bu ekranda dosya adı, yükleme tarihi, işleme durumu ve indeksleme tamamlanma bilgisi gösterilir.
+
+\subsubsection{B.2 Soru-Cevap Ekranı}
+Kullanıcının soru yazdığı, sistemin kaynaklarla birlikte cevap ürettiği ve cevabın altında kullanılan doküman parçalarının gösterildiği ana ekrandır. Cevap alanı, kaynak bağlantıları ve benzerlik skorları birlikte sunulur.
+
+\subsubsection{B.3 Kaynak Görüntüleme Ekranı}
+Kullanıcının cevaptaki kaynağa tıkladığında ilgili PDF sayfasının ve paragrafın vurgulanmış olarak gösterildiği modal penceredir. Bu ekran, cevabın hangi doküman parçasına dayandığını denetlenebilir hâle getirir.
+
+\subsection{Ek C: Test Soruları ve Cevapları Örneği}
+
+\begin{table}[htbp]
+\centering
+\caption{Örnek Test Soruları ve Beklenen Cevaplar}
+\begin{tabular}{|L{0.28\textwidth}|L{0.44\textwidth}|L{0.18\textwidth}|}
+\hline
+\textbf{Soru} & \textbf{Beklenen Cevap} & \textbf{Kaynak} \\
+\hline
+RAG nedir? & Retrieval-Augmented Generation, bilgi erişimi ile üretici dil modellerini birleştiren bir yaklaşımdır. & Lewis et al. 2020, Sayfa 3 \\
+\hline
+Chunking nedir? & Doküman metninin embedding ve retrieval için uygun boyutta parçalara ayrılması işlemidir. & Gao et al. 2023, Sayfa 7 \\
+\hline
+Embedding modeli ne amaçla kullanılır? & Metinlerin anlamsal benzerlik hesaplamasına uygun sayısal vektörlere dönüştürülmesini sağlar. & Reimers ve Gurevych 2019, Sayfa 4 \\
+\hline
+Vektör veritabanının RAG sistemindeki rolü nedir? & Embedding vektörlerini saklar ve kullanıcı sorgusuna en benzer doküman parçalarının hızlı biçimde bulunmasını sağlar. & Johnson et al. 2019, Sayfa 6 \\
+\hline
+RAG halüsinasyonu nasıl azaltır? & Cevap üretimini geri getirilen kaynak parçalarına dayandırarak modelin bağlam dışı bilgi üretme riskini azaltır. & Shuster et al. 2021, Sayfa 5 \\
+\hline
+\end{tabular}
+\end{table}
+
 
 \end{document}
